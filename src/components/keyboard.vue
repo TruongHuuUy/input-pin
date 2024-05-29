@@ -18,6 +18,7 @@ const handleKeyBoard = (event: KeyboardEvent) => {
 };
 
 const handleClickKey = (number: string) => {
+  if (number === "XOA") return emit("numberClick", "Backspace");
   emit("numberClick", number);
 };
 

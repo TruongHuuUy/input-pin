@@ -3,10 +3,10 @@ import { ref, watch } from "vue";
 
 interface Props {
   valueInputs: string[];
-  currentInput: number;
+  indexInput: number;
 }
 const props = withDefaults(defineProps<Props>(), {});
-const emit = defineEmits(["update:currentInput", "update:valueInputs"]);
+const emit = defineEmits(["update:indexInput", "update:valueInputs"]);
 
 const inputsRef = ref<Record<number, HTMLInputElement>>({});
 
@@ -19,26 +19,26 @@ const handleClick = (index: number) => {
 };
 
 const handleFocus = (index: number) => {
-  emit("update:currentInput", index);
+  emit("update:indexInput", index);
 };
 
 const handleBlur = (index: number) => {
+  inputsRef.value[index].focus();
   inputsRef.value[index].blur();
 };
 
 const updateFocus = () => {
-  let nextFocus = props.currentInput;
+  let nextFocus = props.indexInput;
   const isInputEmpty = props.valueInputs[nextFocus] === "";
-  const nextIndex = findNextIndex();
 
-  if (isInputEmpty) {
-    nextFocus = props.currentInput;
-  } else if (nextIndex !== -1) {
-    nextFocus = nextIndex;
+  if (!isInputEmpty) nextFocus = findNextIndex();
+
+  if (nextFocus === -1) {
+    nextFocus = props.valueInputs.length - 1;
+    handleBlur(nextFocus);
+  } else {
+    inputsRef.value[nextFocus].focus();
   }
-
-  inputsRef.value[nextFocus].focus();
-  if (nextIndex === -1 || !isInputEmpty) handleBlur(nextFocus);
 };
 
 const findNextIndex = () => {

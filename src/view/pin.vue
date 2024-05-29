@@ -5,22 +5,21 @@ import { computed, reactive, ref } from "vue";
 
 const inputFieldsRef = ref(null);
 const inputs = reactive<string[]>(["", "", "", "", "", ""]);
-const currentInput = ref(0);
+const indexInput = ref(0);
 
 const isValidatePin = computed(() => {
   return !inputs.includes("");
 });
 
 const handleNumberClick = (number: string) => {
-  const isInputEmpty = inputs[currentInput.value] === "";
-
-  if (number !== "XOA" && number !== "Backspace")
-    return isInputEmpty && (inputs[currentInput.value] = number);
-
-  if (isInputEmpty && currentInput.value > 0) {
-    currentInput.value--;
+  if (number === "Backspace") {
+    if (!isValidatePin.value && indexInput.value > 0) {
+      indexInput.value--;
+    }
+    inputs[indexInput.value] = "";
+  } else if (!isValidatePin.value) {
+    inputs[indexInput.value] = number;
   }
-  inputs[currentInput.value] = "";
 };
 
 const submit = () => {
@@ -29,27 +28,21 @@ const submit = () => {
 </script>
 
 <template>
-  <section class="w-full mx-auto">
-    <div class="flex justify-center">
-      <InputPin
-        :current-input="currentInput"
-        :value-inputs="inputs"
-        ref="inputFieldsRef"
-        @update:currentInput="currentInput = $event"
-      />
-    </div>
-    <div class="max-w-max mx-auto my-10">
-      <button
-        class="py-2 px-10 font-bold text-xl rounded-lg"
-        :class="[isValidatePin ? 'bg-sky-300 text-orange-500' : 'bg-slate-400']"
-        :disabled="!isValidatePin"
-        @click="submit()"
-      >
-        XÁC NHẬN
-      </button>
-    </div>
-    <div>
-      <Keyboard @number-click="handleNumberClick" />
-    </div>
+  <section class="max-w-max mx-auto">
+    <InputPin
+      :index-input="indexInput"
+      :value-inputs="inputs"
+      ref="inputFieldsRef"
+      @update:indexInput="indexInput = $event"
+    />
+    <button
+      class="py-2 px-10 font-bold text-xl rounded-lg w-full my-10"
+      :class="[isValidatePin ? 'bg-sky-300 text-orange-500' : 'bg-slate-400']"
+      :disabled="!isValidatePin"
+      @click="submit()"
+    >
+      XÁC NHẬN
+    </button>
+    <Keyboard @number-click="handleNumberClick" />
   </section>
 </template>
