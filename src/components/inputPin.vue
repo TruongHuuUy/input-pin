@@ -28,17 +28,17 @@ const handleBlur = (index: number) => {
 
 const updateFocus = () => {
   let nextFocus = props.currentInput;
-  const valueInputs = props.valueInputs;
+  const isInputEmpty = props.valueInputs[nextFocus] === "";
   const nextIndex = findNextIndex();
 
-  if (valueInputs[nextFocus] === "") {
+  if (isInputEmpty) {
     nextFocus = props.currentInput;
   } else if (nextIndex !== -1) {
     nextFocus = nextIndex;
   }
-  inputsRef.value[nextFocus].focus();
 
-  if (nextIndex === -1 || valueInputs[nextFocus] !== "") handleBlur(nextFocus);
+  inputsRef.value[nextFocus].focus();
+  if (nextIndex === -1 || !isInputEmpty) handleBlur(nextFocus);
 };
 
 const findNextIndex = () => {

@@ -12,12 +12,12 @@ const isValidatePin = computed(() => {
 });
 
 const handleNumberClick = (number: string) => {
-  const inputEmpty = inputs[currentInput.value] === "";
+  const isInputEmpty = inputs[currentInput.value] === "";
 
   if (number !== "XOA" && number !== "Backspace")
-    return inputEmpty && (inputs[currentInput.value] = number);
+    return isInputEmpty && (inputs[currentInput.value] = number);
 
-  if (inputEmpty && currentInput.value > 0) {
+  if (isInputEmpty && currentInput.value > 0) {
     currentInput.value--;
   }
   inputs[currentInput.value] = "";
