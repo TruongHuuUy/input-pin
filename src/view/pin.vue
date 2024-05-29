@@ -11,25 +11,14 @@ const isValidatePin = computed(() => {
   return !inputs.includes("");
 });
 
-const findNextIndex = () => {
-  let foundIndex = -1;
-  for (let i = inputs.length - 1; i >= 0; i--) {
-    if (inputs[i] !== "") {
-      foundIndex = i;
-      break;
-    }
-  }
-
-  return foundIndex;
-};
-
 const handleNumberClick = (number: string) => {
-  if (number !== "XOA" && number !== "Backspace")
-    return (inputs[currentInput.value] = number);
+  const inputEmpty = inputs[currentInput.value] === "";
 
-  if (inputs[currentInput.value] === "") {
-    const index = findNextIndex();
-    currentInput.value = index === -1 ? 0 : index;
+  if (number !== "XOA" && number !== "Backspace")
+    return inputEmpty && (inputs[currentInput.value] = number);
+
+  if (inputEmpty && currentInput.value > 0) {
+    currentInput.value--;
   }
   inputs[currentInput.value] = "";
 };

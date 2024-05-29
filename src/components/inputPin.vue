@@ -22,6 +22,10 @@ const handleFocus = (index: number) => {
   emit("update:currentInput", index);
 };
 
+const handleBlur = (index: number) => {
+  inputsRef.value[index].blur();
+};
+
 const updateFocus = () => {
   let nextFocus = props.currentInput;
   const valueInputs = props.valueInputs;
@@ -31,11 +35,10 @@ const updateFocus = () => {
     nextFocus = props.currentInput;
   } else if (nextIndex !== -1) {
     nextFocus = nextIndex;
-  } else {
-    nextFocus = valueInputs.length - 1;
   }
-
   inputsRef.value[nextFocus].focus();
+
+  if (nextIndex === -1 || valueInputs[nextFocus] !== "") handleBlur(nextFocus);
 };
 
 const findNextIndex = () => {
