@@ -18,6 +18,7 @@ const handleKeyBoard = (event: KeyboardEvent) => {
 };
 
 const handleClickKey = (number: string) => {
+  if (number === "") return;
   if (number === "XOA") return emit("numberClick", "Backspace");
   emit("numberClick", number);
 };
@@ -37,7 +38,7 @@ onBeforeUnmount(() => {
         :key="number"
         class="w-16 h-16 text-blue-500 mb-5 rounded-full mx-auto text-xl font-bold"
         :class="[number !== '' ? 'bg-white' : 'cursor-default']"
-        @click="number !== '' && handleClickKey(number)"
+        @click="handleClickKey(number)"
       >
         {{ number }}
       </button>
